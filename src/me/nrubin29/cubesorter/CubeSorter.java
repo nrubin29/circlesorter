@@ -1,18 +1,23 @@
 package me.nrubin29.cubesorter;
 
+import me.nrubin29.cubesorter.powerup.Powerup;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
-class CubeSorter extends JComponent {
-	
-	private final Container c;
-	
-	private Entity currentCube;
-	private final ArrayList<Platform> platforms;
+public class CubeSorter extends JComponent {
+
+    private final Container c;
+
+    private Entity currentCube;
+    private final ArrayList<Platform> platforms;
+    private final ArrayList<Powerup> powerups;
 
     private boolean pressedDown, pressedLeft, pressedRight;
 
@@ -26,12 +31,14 @@ class CubeSorter extends JComponent {
 		platforms = new ArrayList<Platform>();
 		platforms.add(new Platform(Color.RED, 50, 400, 100, 50));
 		platforms.add(new Platform(Color.BLUE, 640 - 150, 400, 100, 50));
-		
-		random = new Random();
-		
-		round = new Round();
-		
-		this.c = c;
+
+        powerups = new ArrayList<Powerup>();
+
+        random = new Random();
+
+        round = new Round();
+
+        this.c = c;
 		
 		addBlock();
 		
@@ -92,17 +99,28 @@ class CubeSorter extends JComponent {
 		for (Platform p : platforms) {
 			if (p.getBounds().contains(currentCube.getX(), currentCube.getY())) {
 				 if (p.getColor().equals(currentCube.getColor())) {
-					 round.addScore();
-				 } else {
-					 round.removeLife();
-				 }
+                     round.addScore(this);
+                 } else {
+                     round.removeLife();
+                 }
 				 addBlock = true;
 				 break;
 			}
 		}
-		
-		if (round.getLives() == 0) {
-			t.stop();
+
+        ArrayList<Powerup> remove = new ArrayList<Powerup>();
+
+        for (Powerup p : powerups) {
+            if (p.getBounds().contains(currentCube.getX(), currentCube.getY())) {
+                p.hit(this);
+                remove.add(p);
+            }
+        }
+
+        powerups.removeAll(remove);
+
+        if (round.getLives() == 0) {
+            t.stop();
             round.endRound();
 			repaint();
 		}
@@ -115,11 +133,18 @@ class CubeSorter extends JComponent {
 	}
 	
 	private void addBlock() {
-		currentCube = new Entity(random.nextBoolean() ? Color.RED : Color.BLUE, 10, 10);
-		currentCube.setX(640 / 2 - currentCube.getWidth());
-	}
-	
-	@Override
+        currentCube = new Entity(random.nextBoolean() ? Color.RED : Color.BLUE, 10, 10) {
+            @Override
+            public void paint(Graphics g) {
+                g.setColor(getColor());
+                g.fillRect(getX(), getY(), getWidth(), getHeight());
+            }
+        };
+
+        currentCube.setX(640 / 2 - currentCube.getWidth());
+    }
+
+    @Override
 	public void paintComponent(Graphics g) {
 		g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
 		g.drawString(String.valueOf(round.getScore()), 600, 25);
@@ -132,31 +157,41 @@ class CubeSorter extends JComponent {
 		
 		if (t.isRunning()) {
 			for (Platform p : platforms) {
-				g.setColor(p.getColor());
-				g.fillRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
-			}
-			
-			g.setColor(currentCube.getColor());
-			g.fillRect(currentCube.getX(), currentCube.getY(), currentCube.getWidth(), currentCube.getHeight());
-		} else {
-			g.setColor(Color.RED);
-			g.drawString("You died!", 640 / 2 - g.getFontMetrics().stringWidth("You died!") / 2, 480 / 2);
-			g.drawString("Press enter to restart.", 640 / 2 - g.getFontMetrics().stringWidth("Press enter to restart.") / 2, 480 / 2 + 20);
-			
-			c.addKeyListener(new KeyAdapter() {
-				@Override
-				public void keyPressed(KeyEvent e) {
+                p.paint(g);
+            }
+
+            for (Powerup p : powerups) {
+                p.paint(g);
+            }
+
+            currentCube.paint(g);
+        } else {
+            g.setColor(Color.RED);
+            g.drawString("You died!", 640 / 2 - g.getFontMetrics().stringWidth("You died!") / 2, 480 / 2);
+            g.drawString("Reload to restart.", 640 / 2 - g.getFontMetrics().stringWidth("Reload to restart.") / 2, 480 / 2 + 20);
+
+            c.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-						try {
-							new ProcessBuilder("java", "-jar", new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).getPath()).start();
-						} catch (Exception ex) {
-							JOptionPane.showMessageDialog(CubeSorter.this, "Could not restart. Quitting.", "Error", JOptionPane.ERROR_MESSAGE);
-						}
-						
-						System.exit(0);
-					}
+                        /*
+                        Have it restart.
+						 */
+                    }
 				}
 			});
 		}
-	}
+    }
+
+    public void addPowerup(Powerup p) {
+        powerups.add(p);
+    }
+
+    public void removePowerup(Powerup p) {
+        powerups.remove(p);
+    }
+
+    public Round getRound() {
+        return round;
+    }
 }

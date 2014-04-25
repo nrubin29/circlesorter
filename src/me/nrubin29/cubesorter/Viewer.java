@@ -4,7 +4,11 @@ import javax.swing.*;
 
 public class Viewer extends JApplet {
 
+    public static boolean DESKTOP;
+
     public Viewer() {
+        DESKTOP = false;
+
         add(new CubeSorter(this));
 		
 		setSize(640, 480);
@@ -12,6 +16,8 @@ public class Viewer extends JApplet {
 	}
 
     public static void main(String[] args) {
+        DESKTOP = true;
+
         JFrame frame = new JFrame("Cube Sorter");
 
         frame.add(new CubeSorter(frame));
