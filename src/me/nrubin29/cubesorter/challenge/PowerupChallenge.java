@@ -27,7 +27,7 @@ public class PowerupChallenge extends Challenge {
         new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (r.nextBoolean() && currentPowerup == null) {
+                if (r.nextInt(100) == 29 && currentPowerup == null) {
                     int x = r.nextInt(640), y = r.nextInt(480);
                     System.out.println("Going to add powerup at (" + x + "," + y + ").");
                     try {
