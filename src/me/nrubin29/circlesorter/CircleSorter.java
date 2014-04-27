@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class CircleSorter extends JComponent {
 
-    private final Container c;
+    private final Viewer viewer;
 
     private final ArrayList<Color> colors;
 
@@ -34,7 +34,9 @@ public class CircleSorter extends JComponent {
 
     private final Round round;
 
-    public CircleSorter(Container c) {
+    public CircleSorter(Viewer viewer) {
+        this.viewer = viewer;
+
         colors = new ArrayList<Color>();
         colors.add(Color.RED);
         colors.add(Color.BLUE);
@@ -51,8 +53,6 @@ public class CircleSorter extends JComponent {
 
         round = new Round();
 
-        this.c = c;
-
         addCircle();
 
         t = new Timer(1000 / 60, new ActionListener() {
@@ -64,10 +64,7 @@ public class CircleSorter extends JComponent {
 
         t.start();
 
-        Component addListenerTo;
-        if (c instanceof JFrame) addListenerTo = this;
-        else addListenerTo = c;
-        addListenerTo.addKeyListener(new KeyAdapter() {
+        viewer.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 handle(e, true);
@@ -104,7 +101,7 @@ public class CircleSorter extends JComponent {
 
         boolean addBlock = false;
 
-        if (currentCircle.getY() >= c.getHeight()) {
+        if (currentCircle.getY() >= viewer.getHeight()) {
             addBlock = true;
             round.removeLife();
         }
@@ -160,7 +157,7 @@ public class CircleSorter extends JComponent {
             texts.append(t).append(" ");
         }
 
-        g.drawString(texts.toString(), c.getWidth() / 2 - g.getFontMetrics().stringWidth(texts.toString()) / 2, 25 + g.getFontMetrics().getHeight() * 2);
+        g.drawString(texts.toString(), viewer.getWidth() / 2 - g.getFontMetrics().stringWidth(texts.toString()) / 2, 25 + g.getFontMetrics().getHeight() * 2);
 
         for (int i = 0; i < round.getLives(); i++) {
             g.drawImage(GameImage.HEART.getImage(), 20 + (30 * i), 10, 20, 20, this);
@@ -179,14 +176,17 @@ public class CircleSorter extends JComponent {
         } else {
             g.setColor(java.awt.Color.RED);
             g.drawString("You died!", 640 / 2 - g.getFontMetrics().stringWidth("You died!") / 2, 480 / 2);
-            g.drawString("Press enter to restart.", 640 / 2 - g.getFontMetrics().stringWidth("Press enter to restart.") / 2, 480 / 2 + 20);
+            g.drawString("Press enter to return to the menu.", 640 / 2 - g.getFontMetrics().stringWidth("Press enter to return to the menu.") / 2, 480 / 2 + 20);
 
-            c.addKeyListener(new KeyAdapter() {
+            viewer.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyPressed(KeyEvent e) {
                     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        c.remove(CircleSorter.this);
-                        c.add(new CircleSorter(c));
+                        viewer.removeKeyListener(this);
+                        viewer.remove(CircleSorter.this);
+                        viewer.add(new Menu(viewer));
+                        viewer.validate();
+                        viewer.repaint();
                     }
                 }
             });

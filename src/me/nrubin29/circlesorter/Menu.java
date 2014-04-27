@@ -4,23 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 class Menu extends JComponent {
 
-    private KeyListener keyListener;
-
-    public Menu(final Container c) {
-        c.addKeyListener(keyListener = new KeyAdapter() {
+    public Menu(final Viewer viewer) {
+        viewer.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                System.out.println(e.getKeyCode());
-
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    c.remove(Menu.this);
-                    c.add(new CircleSorter(c));
-                    repaint();
-                    c.removeKeyListener(keyListener);
+                    viewer.removeKeyListener(this);
+                    viewer.remove(Menu.this);
+                    viewer.add(new CircleSorter(viewer));
+                    viewer.validate();
+                    viewer.repaint();
                 }
             }
         });
@@ -28,6 +24,16 @@ class Menu extends JComponent {
 
     @Override
     public void paintComponent(Graphics g) {
-        g.drawImage(GameImage.MULTIBALL.getImage(), 0, 0, this);
+        g.drawImage(GameImage.MULTIBALL.getImage(), 640 / 2 - 50 / 2, 10, 50, 50, this);
+
+        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 30));
+        g.drawString("Circle Sorter", 640 / 2 - g.getFontMetrics().stringWidth("Circle Sorter") / 2, 100);
+
+        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+        g.drawString("Press enter to play.", 640 / 2 - g.getFontMetrics().stringWidth("Press enter to play.") / 2, 250);
+
+        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 15));
+        g.drawString("Created by Noah.", 640 / 2 - g.getFontMetrics().stringWidth("Created by Noah.") / 2, 425);
+        g.drawString("Concept and Graphics by Luke.", 640 / 2 - g.getFontMetrics().stringWidth("Concept and Graphics by Luke.") / 2, 450);
     }
 }
