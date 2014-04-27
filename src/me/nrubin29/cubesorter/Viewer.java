@@ -10,8 +10,9 @@ public class Viewer extends JApplet {
         DESKTOP = false;
 
         add(new CubeSorter(this));
-		
-		setSize(640, 480);
+
+        setBackground(java.awt.Color.WHITE);
+        setSize(640, 480);
 		setVisible(true);
 	}
 
@@ -22,6 +23,7 @@ public class Viewer extends JApplet {
 
         frame.add(new CubeSorter(frame));
 
+        frame.setBackground(java.awt.Color.WHITE);
         frame.setSize(640, 480);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);

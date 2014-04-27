@@ -1,13 +1,12 @@
 package me.nrubin29.cubesorter.powerup;
 
 import me.nrubin29.cubesorter.CubeSorter;
-
-import java.awt.*;
+import me.nrubin29.cubesorter.GameImage;
 
 public class LifePowerup extends Powerup {
 
     public LifePowerup(Integer x, Integer y) {
-        super(Color.BLACK, 20, 20, x, y);
+        super(GameImage.HEART, x, y);
     }
 
     @Override

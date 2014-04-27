@@ -32,7 +32,7 @@ public class Round {
     }
 
     public void addScore(CubeSorter cubeSorter) {
-        ChallengeManager.getInstance().handleLevelIncrease(score++, cubeSorter);
+        ChallengeManager.getInstance().handleLevelIncrease(++score, cubeSorter);
     }
 
     public int getSecondsPlayed() {

@@ -3,14 +3,16 @@ package me.nrubin29.cubesorter;
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class Entity extends JComponent {
+public class Entity extends JComponent {
 
     private final Color color;
+    private final GameImage img;
     private final int width, height;
     private int x, y;
 
-    public Entity(Color color, int width, int height) {
+    public Entity(Color color, GameImage img, int width, int height) {
         this.color = color;
+        this.img = img;
         this.width = width;
         this.height = height;
     }
@@ -59,8 +61,7 @@ public abstract class Entity extends JComponent {
 
     @Override
     public void paintComponent(Graphics g) {
-        g.setColor(getColor());
-        g.fillRect(getX(), getY(), getWidth(), getHeight());
+        g.drawImage(img.getImage(), getX(), getY(), getWidth(), getHeight(), null);
     }
 
     @Override
