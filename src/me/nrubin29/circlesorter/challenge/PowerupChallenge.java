@@ -1,10 +1,10 @@
-package me.nrubin29.cubesorter.challenge;
+package me.nrubin29.circlesorter.challenge;
 
-import me.nrubin29.cubesorter.CubeSorter;
-import me.nrubin29.cubesorter.powerup.LifePowerup;
-import me.nrubin29.cubesorter.powerup.MultiballPowerup;
-import me.nrubin29.cubesorter.powerup.Powerup;
-import me.nrubin29.cubesorter.powerup.SlowPowerup;
+import me.nrubin29.circlesorter.CircleSorter;
+import me.nrubin29.circlesorter.powerup.LifePowerup;
+import me.nrubin29.circlesorter.powerup.MultiballPowerup;
+import me.nrubin29.circlesorter.powerup.Powerup;
+import me.nrubin29.circlesorter.powerup.SlowPowerup;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -31,13 +31,13 @@ public class PowerupChallenge extends Challenge {
     }
 
     @Override
-    public void apply(final CubeSorter cubeSorter) {
+    public void apply(final CircleSorter circleSorter) {
         new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (r.nextInt(50) == 29 && currentPowerup == null) {
                     int x = r.nextInt(640), y = r.nextInt(480);
-                    cubeSorter.addPowerup(getPowerup(cubeSorter.getRound().getScore(), x, y));
+                    circleSorter.addPowerup(getPowerup(circleSorter.getRound().getScore(), x, y));
                 }
             }
         }).start();
@@ -46,16 +46,16 @@ public class PowerupChallenge extends Challenge {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (currentPowerup != null) {
-                    cubeSorter.removePowerup();
+                    circleSorter.removePowerup();
                     currentPowerup = null;
                 }
             }
         }).start();
     }
 
-    public void onLevelIncrease(int level, CubeSorter cubeSorter) {
+    public void onLevelIncrease(int level, CircleSorter circleSorter) {
         if (powerups.get(level) != null) {
-            cubeSorter.addText("Unlocked " + powerups.get(level).getSimpleName() + ".");
+            circleSorter.addText("Unlocked " + powerups.get(level).getSimpleName() + ".");
         }
     }
 

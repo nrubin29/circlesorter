@@ -1,7 +1,7 @@
-package me.nrubin29.cubesorter.challenge;
+package me.nrubin29.circlesorter.challenge;
 
-import me.nrubin29.cubesorter.Color;
-import me.nrubin29.cubesorter.CubeSorter;
+import me.nrubin29.circlesorter.CircleSorter;
+import me.nrubin29.circlesorter.Color;
 
 class NewBinChallenge extends Challenge {
 
@@ -15,7 +15,7 @@ class NewBinChallenge extends Challenge {
         this.x = x;
     }
 
-    public void apply(CubeSorter cubeSorter) {
-        cubeSorter.addColor(c, x);
+    public void apply(CircleSorter circleSorter) {
+        circleSorter.addColor(c, x);
     }
 }

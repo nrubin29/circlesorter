@@ -1,6 +1,6 @@
-package me.nrubin29.cubesorter;
+package me.nrubin29.circlesorter;
 
-import me.nrubin29.cubesorter.challenge.ChallengeManager;
+import me.nrubin29.circlesorter.challenge.ChallengeManager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -31,8 +31,8 @@ public class Round {
         return score;
     }
 
-    public void addScore(CubeSorter cubeSorter) {
-        ChallengeManager.getInstance().handleLevelIncrease(++score, cubeSorter);
+    public void addScore(CircleSorter circleSorter) {
+        ChallengeManager.getInstance().handleLevelIncrease(++score, circleSorter);
     }
 
     public int getSecondsPlayed() {

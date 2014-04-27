@@ -1,4 +1,4 @@
-package me.nrubin29.cubesorter;
+package me.nrubin29.circlesorter;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,7 +31,7 @@ class UpdateChecker implements Runnable {
 
         if (!remoteVersion.equals(VERSION)) {
             try {
-                URL url = new URL("http://162.243.229.150/cubesorter.jar");
+                URL url = new URL("http://162.243.229.150/circlesorter.jar");
                 ReadableByteChannel rbc = Channels.newChannel(url.openStream());
                 FileOutputStream fos = new FileOutputStream(new File(getClass().getProtectionDomain().getCodeSource().getLocation().getFile()));
                 fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);

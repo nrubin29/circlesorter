@@ -1,4 +1,4 @@
-package me.nrubin29.cubesorter;
+package me.nrubin29.circlesorter;
 
 class Bin extends Entity {
 

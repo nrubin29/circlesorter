@@ -1,4 +1,4 @@
-package me.nrubin29.cubesorter;
+package me.nrubin29.circlesorter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ class Menu extends JComponent {
 
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     c.remove(Menu.this);
-                    c.add(new CubeSorter(c));
+                    c.add(new CircleSorter(c));
                     repaint();
                     c.removeKeyListener(keyListener);
                 }

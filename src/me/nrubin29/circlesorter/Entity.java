@@ -1,4 +1,4 @@
-package me.nrubin29.cubesorter;
+package me.nrubin29.circlesorter;
 
 import javax.swing.*;
 import java.awt.*;

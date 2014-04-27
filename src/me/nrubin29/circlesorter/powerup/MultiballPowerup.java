@@ -1,7 +1,7 @@
-package me.nrubin29.cubesorter.powerup;
+package me.nrubin29.circlesorter.powerup;
 
-import me.nrubin29.cubesorter.CubeSorter;
-import me.nrubin29.cubesorter.GameImage;
+import me.nrubin29.circlesorter.CircleSorter;
+import me.nrubin29.circlesorter.GameImage;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -14,13 +14,13 @@ public class MultiballPowerup extends Powerup {
     }
 
     @Override
-    public void hit(final CubeSorter cubeSorter) {
-        cubeSorter.multiball = true;
+    public void hit(final CircleSorter circleSorter) {
+        circleSorter.multiball = true;
 
         new Timer(10 * 1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cubeSorter.multiball = false;
+                circleSorter.multiball = false;
             }
         });
     }

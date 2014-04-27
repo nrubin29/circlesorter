@@ -1,7 +1,7 @@
-package me.nrubin29.cubesorter.powerup;
+package me.nrubin29.circlesorter.powerup;
 
-import me.nrubin29.cubesorter.CubeSorter;
-import me.nrubin29.cubesorter.GameImage;
+import me.nrubin29.circlesorter.CircleSorter;
+import me.nrubin29.circlesorter.GameImage;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -14,14 +14,14 @@ public class SlowPowerup extends Powerup {
     }
 
     @Override
-    public void hit(final CubeSorter cubeSorter) {
-        final int oldSpeed = cubeSorter.speed;
-        cubeSorter.speed /= 2;
+    public void hit(final CircleSorter circleSorter) {
+        final int oldSpeed = circleSorter.speed;
+        circleSorter.speed /= 2;
 
         new Timer(20 * 1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cubeSorter.speed = oldSpeed;
+                circleSorter.speed = oldSpeed;
             }
         }).start();
     }

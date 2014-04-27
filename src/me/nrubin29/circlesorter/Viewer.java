@@ -1,4 +1,4 @@
-package me.nrubin29.cubesorter;
+package me.nrubin29.circlesorter;
 
 import javax.swing.*;
 
@@ -9,7 +9,7 @@ public class Viewer extends JApplet {
     public Viewer() {
         DESKTOP = false;
 
-        add(new CubeSorter(this));
+        add(new CircleSorter(this));
 
         setBackground(java.awt.Color.WHITE);
         setSize(640, 480);
@@ -19,9 +19,9 @@ public class Viewer extends JApplet {
     public static void main(String[] args) {
         DESKTOP = true;
 
-        JFrame frame = new JFrame("Cube Sorter");
+        JFrame frame = new JFrame("Circle Sorter");
 
-        frame.add(new CubeSorter(frame));
+        frame.add(new CircleSorter(frame));
 
         frame.setBackground(java.awt.Color.WHITE);
         frame.setSize(640, 480);

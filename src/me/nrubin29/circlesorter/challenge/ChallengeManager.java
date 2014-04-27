@@ -1,7 +1,7 @@
-package me.nrubin29.cubesorter.challenge;
+package me.nrubin29.circlesorter.challenge;
 
-import me.nrubin29.cubesorter.Color;
-import me.nrubin29.cubesorter.CubeSorter;
+import me.nrubin29.circlesorter.CircleSorter;
+import me.nrubin29.circlesorter.Color;
 
 import java.util.HashMap;
 
@@ -28,15 +28,15 @@ public class ChallengeManager {
         challenges.put(110, new SpeedChallenge());
     }
 
-    public void handleLevelIncrease(int level, CubeSorter cubeSorter) {
+    public void handleLevelIncrease(int level, CircleSorter circleSorter) {
         if (challenges.get(level) != null) {
             Challenge c = challenges.get(level);
-            c.apply(cubeSorter);
-            if (c.getText() != null) cubeSorter.addText(c.getText());
+            c.apply(circleSorter);
+            if (c.getText() != null) circleSorter.addText(c.getText());
         }
 
         for (Challenge c : challenges.values()) {
-            c.onLevelIncrease(level, cubeSorter);
+            c.onLevelIncrease(level, circleSorter);
         }
     }
 }

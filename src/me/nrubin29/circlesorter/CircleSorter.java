@@ -1,6 +1,6 @@
-package me.nrubin29.cubesorter;
+package me.nrubin29.circlesorter;
 
-import me.nrubin29.cubesorter.powerup.Powerup;
+import me.nrubin29.circlesorter.powerup.Powerup;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,13 +11,13 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class CubeSorter extends JComponent {
+public class CircleSorter extends JComponent {
 
     private final Container c;
 
     private final ArrayList<Color> colors;
 
-    private Entity currentBall;
+    private Entity currentCircle;
     public boolean multiball;
     private final ArrayList<Bin> bins;
 
@@ -34,7 +34,7 @@ public class CubeSorter extends JComponent {
 
     private final Round round;
 
-    public CubeSorter(Container c) {
+    public CircleSorter(Container c) {
         colors = new ArrayList<Color>();
         colors.add(Color.RED);
         colors.add(Color.BLUE);
@@ -91,27 +91,27 @@ public class CubeSorter extends JComponent {
 
     private void tick() {
         if (pressedDown) {
-            currentBall.modifyLocation(0, speed);
+            currentCircle.modifyLocation(0, speed);
         }
 
         if (pressedLeft) {
-            currentBall.modifyLocation(-speed, 0);
+            currentCircle.modifyLocation(-speed, 0);
         }
 
         if (pressedRight) {
-            currentBall.modifyLocation(speed, 0);
+            currentCircle.modifyLocation(speed, 0);
         }
 
         boolean addBlock = false;
 
-        if (currentBall.getY() >= c.getHeight()) {
+        if (currentCircle.getY() >= c.getHeight()) {
             addBlock = true;
             round.removeLife();
         }
 
         for (Bin p : bins) {
-            if (p.getBounds().contains(currentBall.getX(), currentBall.getY())) {
-                if (p.getColor().equals(currentBall.getColor()) || multiball) {
+            if (p.getBounds().contains(currentCircle.getX(), currentCircle.getY())) {
+                if (p.getColor().equals(currentCircle.getColor()) || multiball) {
                     round.addScore(this);
                 } else {
                     round.removeLife();
@@ -121,7 +121,7 @@ public class CubeSorter extends JComponent {
             }
         }
 
-        if (powerup != null && powerup.getBounds().contains(currentBall.getX(), currentBall.getY())) {
+        if (powerup != null && powerup.getBounds().contains(currentCircle.getX(), currentCircle.getY())) {
             powerup.hit(this);
             powerup = null;
         }
@@ -132,7 +132,7 @@ public class CubeSorter extends JComponent {
             repaint();
         }
 
-        currentBall.modifyLocation(0, speed / 2 + 1);
+        currentCircle.modifyLocation(0, speed / 2 + 1);
 
         if (addBlock) addCircle();
 
@@ -141,13 +141,13 @@ public class CubeSorter extends JComponent {
 
     private void addCircle() {
         if (multiball) {
-            currentBall = new Entity(Color.RED, GameImage.MULTIBALL, 20, 20);
+            currentCircle = new Entity(Color.RED, GameImage.MULTIBALL, 20, 20);
         } else {
             Color color = colors.get(random.nextInt(colors.size()));
-            currentBall = new Entity(color, GameImage.valueOf("BALL_" + color.name().toUpperCase()), 20, 20);
+            currentCircle = new Entity(color, GameImage.valueOf("BALL_" + color.name().toUpperCase()), 20, 20);
         }
 
-        currentBall.setX(640 / 2 - currentBall.getWidth() / 2);
+        currentCircle.setX(640 / 2 - currentCircle.getWidth() / 2);
     }
 
     @Override
@@ -175,7 +175,7 @@ public class CubeSorter extends JComponent {
                 powerup.paint(g);
             }
 
-            currentBall.paint(g);
+            currentCircle.paint(g);
         } else {
             g.setColor(java.awt.Color.RED);
             g.drawString("You died!", 640 / 2 - g.getFontMetrics().stringWidth("You died!") / 2, 480 / 2);
@@ -185,8 +185,8 @@ public class CubeSorter extends JComponent {
                 @Override
                 public void keyPressed(KeyEvent e) {
                     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        c.remove(CubeSorter.this);
-                        c.add(new CubeSorter(c));
+                        c.remove(CircleSorter.this);
+                        c.add(new CircleSorter(c));
                     }
                 }
             });
