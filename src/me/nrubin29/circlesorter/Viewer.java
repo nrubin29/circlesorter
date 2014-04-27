@@ -30,6 +30,6 @@ public class Viewer extends JApplet {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        new Thread(new UpdateChecker()).start();
+        new Thread(new UpdateChecker(frame)).start();
     }
 }
