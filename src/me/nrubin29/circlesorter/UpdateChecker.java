@@ -37,6 +37,8 @@ class UpdateChecker implements Runnable {
         }
 
         if (!remoteVersion.equals(VERSION)) {
+            frame.dispose();
+            JOptionPane.showMessageDialog(frame, "Update discovered! Downloading and quitting. Please reopen when the update is installed.");
             try {
                 URL url = new URL("https://github.com/nrubin29/circlesorter/raw/gh-pages/circlesorter.jar?raw=true");
                 ReadableByteChannel rbc = Channels.newChannel(url.openStream());
@@ -44,7 +46,6 @@ class UpdateChecker implements Runnable {
                 fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
                 fos.close();
                 rbc.close();
-                JOptionPane.showMessageDialog(frame, "Updated. Quitting. Please reopen.");
                 System.exit(0);
             } catch (Exception e) {
                 e.printStackTrace();
