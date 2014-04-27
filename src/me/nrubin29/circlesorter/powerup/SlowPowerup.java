@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 public class SlowPowerup extends Powerup {
 
     public SlowPowerup(Integer x, Integer y) {
-        super(GameImage.BALL_PURPLE, x, y);
+        super(GameImage.SNAIL_1, x, y);
     }
 
     @Override

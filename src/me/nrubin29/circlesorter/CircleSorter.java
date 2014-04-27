@@ -195,7 +195,7 @@ public class CircleSorter extends JComponent {
 
     public void addColor(Color color, int x) {
         colors.add(color);
-        bins.add(new Bin(color, GameImage.valueOf("BALL_" + color.name().toUpperCase()), x));
+        bins.add(new Bin(color, GameImage.valueOf("BIN_" + color.name().toUpperCase()), x));
     }
 
     public void addPowerup(Powerup p) {

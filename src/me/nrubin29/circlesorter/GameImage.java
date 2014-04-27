@@ -16,6 +16,8 @@ public enum GameImage {
     BIN_RED,
     BIN_YELLOW,
     HEART,
+    SNAIL_1,
+    SNAIL_2,
     MULTIBALL;
 
 
