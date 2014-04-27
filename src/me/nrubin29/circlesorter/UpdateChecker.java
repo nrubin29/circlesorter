@@ -18,7 +18,7 @@ class UpdateChecker implements Runnable {
         String remoteVersion;
 
         try {
-            URL url = new URL("http://162.243.229.150/version.html");
+            URL url = new URL("https://github.com/nrubin29/cubesorter/tree/gh-pages/version.html?raw=true");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             remoteVersion = in.readLine();
@@ -31,7 +31,7 @@ class UpdateChecker implements Runnable {
 
         if (!remoteVersion.equals(VERSION)) {
             try {
-                URL url = new URL("http://162.243.229.150/circlesorter.jar");
+                URL url = new URL("https://github.com/nrubin29/cubesorter/tree/gh-pages/circlesorter.jar?raw=true");
                 ReadableByteChannel rbc = Channels.newChannel(url.openStream());
                 FileOutputStream fos = new FileOutputStream(new File(getClass().getProtectionDomain().getCodeSource().getLocation().getFile()));
                 fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
