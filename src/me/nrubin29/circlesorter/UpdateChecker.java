@@ -12,7 +12,7 @@ import java.nio.channels.ReadableByteChannel;
 
 class UpdateChecker implements Runnable {
 
-    private static final String VERSION = "0.1";
+    private static final String VERSION = "1.0";
 
     private JFrame frame;
 
@@ -22,13 +22,18 @@ class UpdateChecker implements Runnable {
 
     @Override
     public void run() {
-        String remoteVersion;
+        String remoteVersion, information;
 
         try {
-            URL url = new URL("https://github.com/nrubin29/circlesorter/raw/gh-pages/version.html?raw=true");
+            URL url = new URL("https://github.com/nrubin29/circlesorter/raw/master/version.html?raw=true");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
             remoteVersion = in.readLine();
+            StringBuilder infoBuilder = new StringBuilder();
+            while (in.ready()) infoBuilder.append(in.readLine());
+            information = infoBuilder.toString();
+
             in.close();
             conn.disconnect();
         } catch (Exception e) {
@@ -38,9 +43,9 @@ class UpdateChecker implements Runnable {
 
         if (!remoteVersion.equals(VERSION)) {
             frame.dispose();
-            JOptionPane.showMessageDialog(frame, "Update discovered! Downloading and quitting. Please reopen when the update is installed.");
+            JOptionPane.showMessageDialog(frame, "Update discovered! Changelog:\n" + information + "\nDownloading and quitting. Please reopen when the update is installed.");
             try {
-                URL url = new URL("https://github.com/nrubin29/circlesorter/raw/gh-pages/circlesorter.jar?raw=true");
+                URL url = new URL("https://github.com/nrubin29/circlesorter/raw/master/circlesorter.jar?raw=true");
                 ReadableByteChannel rbc = Channels.newChannel(url.openStream());
                 FileOutputStream fos = new FileOutputStream(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()));
                 fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
