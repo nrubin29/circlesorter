@@ -12,16 +12,20 @@ import java.nio.channels.ReadableByteChannel;
 
 class UpdateChecker implements Runnable {
 
-    private static final String VERSION = "1.0";
+    static final String VERSION = "1.1"; // TODO: Don't forget to change in every new version!
 
-    private JFrame frame;
+    private final JFrame frame;
+    private final boolean development;
 
-    public UpdateChecker(JFrame frame) {
+    public UpdateChecker(JFrame frame, boolean development) {
         this.frame = frame;
+        this.development = development;
     }
 
     @Override
     public void run() {
+        if (development) return;
+
         String remoteVersion, information;
 
         try {
@@ -41,7 +45,7 @@ class UpdateChecker implements Runnable {
             return;
         }
 
-        if (!remoteVersion.equals(VERSION)) {
+        if (!VERSION.equals(remoteVersion)) {
             frame.dispose();
             JOptionPane.showMessageDialog(frame, "Update discovered!\n\nHere's what's new:\n" + information + "\n\nDownloading and quitting. Please reopen when the update is installed.");
             try {

@@ -2,43 +2,84 @@ package me.nrubin29.circlesorter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
-class Menu extends JComponent {
+class Menu extends JPanel {
 
     public Menu(final Viewer viewer) {
-        viewer.addKeyListener(new KeyAdapter() {
+        add(Box.createVerticalStrut(10));
+
+        JLabel logo = new JLabel("Circle Sorter", new ImageIcon(GameImage.MULTIBALL.getImage().getScaledInstance(50, 50, 0)), JLabel.CENTER);
+        logo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        logo.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 30));
+        add(logo);
+
+        add(Box.createVerticalStrut(150));
+
+        final JButton go = new JButton("[G]o");
+        go.setAlignmentX(Component.CENTER_ALIGNMENT);
+        go.addActionListener(new ActionListener() {
             @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    viewer.removeKeyListener(this);
-                    viewer.remove(Menu.this);
-                    viewer.add(new CircleSorter(viewer));
-                    viewer.validate();
-                    viewer.repaint();
-                } else if (e.getKeyCode() == KeyEvent.VK_C) {
-                    String comment = JOptionPane.showInputDialog(viewer, "Write a comment and press OK to send it. Thanks for your input!");
-                    if (comment == null) return;
-                    MySQL.getInstance().pushComment(comment);
-                }
+            public void actionPerformed(ActionEvent e) {
+                viewer.remove(Menu.this);
+                viewer.add(new CircleSorter(viewer));
+                viewer.validate();
+                viewer.repaint();
+                viewer.requestFocus();
+
+                getInputMap().remove(KeyStroke.getKeyStroke(KeyEvent.VK_G, 0));
+                getInputMap().remove(KeyStroke.getKeyStroke(KeyEvent.VK_C, 0));
+
+                getActionMap().remove("go");
+                getActionMap().remove("comment");
             }
         });
-    }
+        add(go);
 
-    @Override
-    public void paintComponent(Graphics g) {
-        g.drawImage(GameImage.MULTIBALL.getImage(), 640 / 2 - 50 / 2, 10, 50, 50, this);
+        final JButton comment = new JButton("[C]omment");
+        comment.setAlignmentX(Component.CENTER_ALIGNMENT);
+        comment.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String comm = JOptionPane.showInputDialog(viewer, "Write a comment and press OK to send it. Thanks for your input!");
+                if (comm == null) return;
+                MySQL.getInstance().pushComment(comm);
+            }
+        });
+        add(comment);
 
-        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 30));
-        g.drawString("Circle Sorter", 640 / 2 - g.getFontMetrics().stringWidth("Circle Sorter") / 2, 100);
+        add(Box.createVerticalStrut(150));
 
-        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
-        g.drawString("Press enter to play.", 640 / 2 - g.getFontMetrics().stringWidth("Press enter to play.") / 2, 250);
-        g.drawString("Press c to send a comment.", 640 / 2 - g.getFontMetrics().stringWidth("Press c to send a comment.") / 2, 275);
+        JLabel created = new JLabel("Created by Noah.");
+        created.setAlignmentX(Component.CENTER_ALIGNMENT);
+        created.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 15));
+        add(created);
 
-        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 15));
-        g.drawString("Created by Noah.", 640 / 2 - g.getFontMetrics().stringWidth("Created by Noah.") / 2, 430);
-        g.drawString("Concept and Graphics by Luke.", 640 / 2 - g.getFontMetrics().stringWidth("Concept and Graphics by Luke.") / 2, 450);
+        JLabel concept = new JLabel("Concept and Graphics by Luke.");
+        concept.setAlignmentX(Component.CENTER_ALIGNMENT);
+        concept.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 15));
+        add(concept);
+
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_G, 0), "go");
+        getActionMap().put("go", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                go.doClick();
+            }
+        });
+
+        getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_C, 0), "comment");
+        getActionMap().put("comment", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                comment.doClick();
+            }
+        });
+
+        requestFocusInWindow();
     }
 }

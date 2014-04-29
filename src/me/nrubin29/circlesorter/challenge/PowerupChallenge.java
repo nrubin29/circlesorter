@@ -1,10 +1,7 @@
 package me.nrubin29.circlesorter.challenge;
 
 import me.nrubin29.circlesorter.CircleSorter;
-import me.nrubin29.circlesorter.powerup.LifePowerup;
-import me.nrubin29.circlesorter.powerup.MultiballPowerup;
-import me.nrubin29.circlesorter.powerup.Powerup;
-import me.nrubin29.circlesorter.powerup.SlowPowerup;
+import me.nrubin29.circlesorter.powerup.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -18,41 +15,44 @@ public class PowerupChallenge extends Challenge {
 
     private final Random r;
     private HashMap<Integer, Class<? extends Powerup>> powerups = new HashMap<Integer, Class<? extends Powerup>>();
-    private Powerup currentPowerup;
 
     public PowerupChallenge() {
         super(null);
 
         this.r = new Random();
         this.powerups = new HashMap<Integer, Class<? extends Powerup>>();
-        powerups.put(20, SlowPowerup.class);
-        powerups.put(50, LifePowerup.class);
-        powerups.put(80, MultiballPowerup.class);
+        powerups.put(30, LifePowerup.class);
+        powerups.put(60, MultiballPowerup.class);
+        powerups.put(100, SlowPowerup.class);
+        powerups.put(120, BinRemovePowerup.class);
     }
 
     @Override
     public void apply(final CircleSorter circleSorter) {
-        new Timer(1000, new ActionListener() {
+        Timer t = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (r.nextInt(50) == 29 && currentPowerup == null) {
+                if (/* r.nextInt(50) == 29 && */ circleSorter.displayedPowerup == null && circleSorter.currentPowerup == null) {
                     int x = r.nextInt(640), y = r.nextInt(480);
-                    circleSorter.addPowerup(getPowerup(circleSorter.getRound().getScore(), x, y));
-                }
-            }
-        }).start();
+                    circleSorter.displayedPowerup = getPowerup(circleSorter.round.getScore(), x, y);
 
-        new Timer(5000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (currentPowerup != null) {
-                    circleSorter.removePowerup();
-                    currentPowerup = null;
+                    Timer t = new Timer(5000, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (circleSorter.displayedPowerup != null) circleSorter.displayedPowerup = null;
+                        }
+                    });
+
+                    t.setRepeats(false);
+                    t.start();
                 }
             }
-        }).start();
+        });
+        t.setRepeats(true);
+        t.start();
     }
 
+    @Override
     public void onLevelIncrease(int level, CircleSorter circleSorter) {
         if (powerups.get(level) != null) {
             circleSorter.addText("Unlocked " + powerups.get(level).getSimpleName() + ".");

@@ -1,5 +1,6 @@
 package me.nrubin29.circlesorter;
 
+import me.nrubin29.circlesorter.challenge.ChallengeManager;
 import me.nrubin29.circlesorter.powerup.Powerup;
 
 import javax.swing.*;
@@ -15,35 +16,33 @@ public class CircleSorter extends JComponent {
 
     private final Viewer viewer;
 
-    private final ArrayList<Color> colors;
-
     private Entity currentCircle;
     public boolean multiball;
-    private final ArrayList<Bin> bins;
+    public final ArrayList<Bin> bins;
 
-    private Powerup powerup;
+    public Powerup currentPowerup, displayedPowerup;
+
     private final ArrayList<String> text;
 
-    private boolean pressedDown, pressedLeft, pressedRight;
+    public boolean sidewaysUnlocked;
+
+    private boolean pressedDown, pressedUp, pressedLeft, pressedRight, pressedSpacebar;
 
     public int speed;
 
     private final Random random;
 
     private final Timer t;
+    private boolean paused;
 
-    private final Round round;
+    public final Round round;
 
     public CircleSorter(Viewer viewer) {
         this.viewer = viewer;
 
-        colors = new ArrayList<Color>();
-        colors.add(Color.RED);
-        colors.add(Color.BLUE);
-
         bins = new ArrayList<Bin>();
-        bins.add(new Bin(Color.RED, GameImage.BIN_RED, 50));
-        bins.add(new Bin(Color.BLUE, GameImage.BIN_BLUE, 640 - 150));
+        bins.add(new Bin(Color.RED, GameImage.BIN_RED, 50, Orientation.VERTICAL));
+        bins.add(new Bin(Color.BLUE, GameImage.BIN_BLUE, 640 - 150, Orientation.VERTICAL));
 
         text = new ArrayList<String>();
 
@@ -58,7 +57,7 @@ public class CircleSorter extends JComponent {
         t = new Timer(1000 / 60, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tick();
+                if (!paused) tick();
             }
         });
 
@@ -76,32 +75,49 @@ public class CircleSorter extends JComponent {
             }
 
             private void handle(KeyEvent e, boolean pressed) {
-                if (e.getKeyCode() == KeyEvent.VK_DOWN) pressedDown = pressed;
-                else if (e.getKeyCode() == KeyEvent.VK_LEFT) pressedLeft = pressed;
-                else if (e.getKeyCode() == KeyEvent.VK_RIGHT) pressedRight = pressed;
+                if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) pressedDown = pressed;
+                else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) pressedUp = pressed;
+                else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) pressedLeft = pressed;
+                else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) pressedRight = pressed;
+                else if (e.getKeyCode() == KeyEvent.VK_SPACE) pressedSpacebar = pressed;
+                else if (e.getKeyCode() == KeyEvent.VK_P && !pressed) paused = !paused;
             }
         });
 
         setFocusable(true);
         requestFocusInWindow();
+
+        ChallengeManager.getInstance().setup(this);
     }
 
     private void tick() {
-        if (pressedDown) {
+        if (pressedSpacebar) {
+            if (currentCircle.getOrientation() == Orientation.HORIZONTAL) currentCircle.modifyLocation(speed, 0);
+            else currentCircle.modifyLocation(0, speed);
+        }
+
+        if (pressedDown && currentCircle.getOrientation() == Orientation.HORIZONTAL) {
             currentCircle.modifyLocation(0, speed);
         }
 
-        if (pressedLeft) {
+        if (pressedUp && currentCircle.getOrientation() == Orientation.HORIZONTAL) {
+            currentCircle.modifyLocation(0, -speed);
+        }
+
+        if (pressedLeft && currentCircle.getOrientation() == Orientation.VERTICAL) {
             currentCircle.modifyLocation(-speed, 0);
         }
 
-        if (pressedRight) {
+        if (pressedRight && currentCircle.getOrientation() == Orientation.VERTICAL) {
             currentCircle.modifyLocation(speed, 0);
         }
 
         boolean addBlock = false;
 
-        if (currentCircle.getY() >= viewer.getHeight()) {
+        if (currentCircle.getOrientation() == Orientation.VERTICAL && currentCircle.getY() >= viewer.getHeight()) {
+            addBlock = true;
+            round.removeLife();
+        } else if (currentCircle.getOrientation() == Orientation.HORIZONTAL && currentCircle.getX() >= viewer.getWidth()) {
             addBlock = true;
             round.removeLife();
         }
@@ -109,7 +125,7 @@ public class CircleSorter extends JComponent {
         for (Bin p : bins) {
             if (p.getBounds().contains(currentCircle.getX(), currentCircle.getY())) {
                 if (p.getColor().equals(currentCircle.getColor()) || multiball) {
-                    round.addScore(this);
+                    round.addScore();
                 } else {
                     round.removeLife();
                 }
@@ -118,18 +134,19 @@ public class CircleSorter extends JComponent {
             }
         }
 
-        if (powerup != null && powerup.getBounds().contains(currentCircle.getX(), currentCircle.getY())) {
-            powerup.hit(this);
-            powerup = null;
+        if (displayedPowerup != null && displayedPowerup.getBounds().contains(currentCircle.getX(), currentCircle.getY())) {
+            displayedPowerup.use(this);
         }
 
         if (round.getLives() == 0) {
             t.stop();
             round.endRound();
+            text.clear();
             repaint();
         }
 
-        currentCircle.modifyLocation(0, speed / 2 + 1);
+        if (currentCircle.getOrientation() == Orientation.VERTICAL) currentCircle.modifyLocation(0, speed / 2 + 1);
+        else currentCircle.modifyLocation(speed / 2 + 1, 0);
 
         if (addBlock) addCircle();
 
@@ -137,20 +154,32 @@ public class CircleSorter extends JComponent {
     }
 
     private void addCircle() {
+        Orientation o = sidewaysUnlocked ? Orientation.values()[random.nextInt(Orientation.values().length)] : Orientation.VERTICAL;
+
         if (multiball) {
-            currentCircle = new Entity(Color.RED, GameImage.MULTIBALL, 20, 20);
+            currentCircle = new Entity(Color.RED, GameImage.MULTIBALL, 20, 20, o);
         } else {
-            Color color = colors.get(random.nextInt(colors.size()));
-            currentCircle = new Entity(color, GameImage.valueOf("BALL_" + color.name().toUpperCase()), 20, 20);
+            Color color;
+
+            do {
+                color = bins.get(random.nextInt(bins.size())).getColor();
+            } while (color == null || color.getOrientation() != o);
+
+            currentCircle = new Entity(color, GameImage.valueOf("BALL_" + color.name().toUpperCase()), 20, 20, o);
         }
 
-        currentCircle.setX(640 / 2 - currentCircle.getWidth() / 2);
+        if (o == Orientation.VERTICAL) currentCircle.setX(640 / 2 - currentCircle.getWidth() / 2);
+        else currentCircle.setY(480 / 2 - currentCircle.getHeight() / 2);
     }
 
     @Override
     public void paintComponent(Graphics g) {
         g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
-        g.drawString(String.valueOf(round.getScore()), 600, 25);
+        g.drawString("Score: " + round.getScore(), 560, 25);
+
+        if (currentPowerup != null && currentPowerup.getCurrentSeconds() != -1) {
+            g.drawString("Powerup Time: " + currentPowerup.getCurrentSeconds(), 400, 25);
+        }
 
         StringBuilder texts = new StringBuilder();
         for (String t : text) {
@@ -164,15 +193,15 @@ public class CircleSorter extends JComponent {
         }
 
         if (t.isRunning()) {
-            for (Bin p : bins) {
-                p.paint(g);
+            for (Bin b : bins) {
+                b.paintComponent(g);
             }
 
-            if (powerup != null) {
-                powerup.paint(g);
+            if (displayedPowerup != null) {
+                displayedPowerup.paintComponent(g);
             }
 
-            currentCircle.paint(g);
+            currentCircle.paintComponent(g);
         } else {
             g.setColor(java.awt.Color.RED);
             g.drawString("You died!", 640 / 2 - g.getFontMetrics().stringWidth("You died!") / 2, 480 / 2);
@@ -187,37 +216,20 @@ public class CircleSorter extends JComponent {
                         viewer.add(new Menu(viewer));
                         viewer.validate();
                         viewer.repaint();
+                        viewer.requestFocus();
                     }
                 }
             });
         }
     }
 
-    public void addColor(Color color, int x) {
-        colors.add(color);
-        bins.add(new Bin(color, GameImage.valueOf("BIN_" + color.name().toUpperCase()), x));
-    }
-
-    public void addPowerup(Powerup p) {
-        this.powerup = p;
-    }
-
-    public void removePowerup() {
-        this.powerup = null;
-    }
-
     public void addText(final String t) {
         text.add(t);
-
         new Timer(3000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 text.remove(t);
             }
         }).start();
-    }
-
-    public Round getRound() {
-        return round;
     }
 }

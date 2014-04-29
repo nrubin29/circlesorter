@@ -2,6 +2,7 @@ package me.nrubin29.circlesorter.challenge;
 
 import me.nrubin29.circlesorter.CircleSorter;
 import me.nrubin29.circlesorter.Color;
+import me.nrubin29.circlesorter.Orientation;
 
 import java.util.HashMap;
 
@@ -13,22 +14,33 @@ public class ChallengeManager {
         return instance;
     }
 
+    private CircleSorter circleSorter;
     private final HashMap<Integer, Challenge> challenges;
 
     private ChallengeManager() {
         challenges = new HashMap<Integer, Challenge>();
+        challenges.put(0, new InstructionChallenge("Use the left and right arrow keys to move."));
+        challenges.put(5, new InstructionChallenge("Use the spacebar to speed up."));
         challenges.put(10, new SpeedChallenge());
-        challenges.put(20, new PowerupChallenge());
-        challenges.put(30, new SpeedChallenge());
-        challenges.put(40, new NewBinChallenge(Color.GREEN, 640 / 2 - 100 / 2));
-        challenges.put(50, new SpeedChallenge());
-        challenges.put(70, new NewBinChallenge(Color.YELLOW, 165));
+        challenges.put(15, new InstructionChallenge("Use the p key to pause."));
+        challenges.put(20, new NewBinChallenge(Color.GREEN, 190, Orientation.VERTICAL));
+        challenges.put(30, new PowerupChallenge());
+        challenges.put(40, new SpeedChallenge());
+        challenges.put(50, new NewBinChallenge(Color.YELLOW, 340, Orientation.VERTICAL));
+        challenges.put(70, new SpeedChallenge());
+        challenges.put(80, new HorizontalChallenge());
         challenges.put(90, new SpeedChallenge());
-        challenges.put(100, new NewBinChallenge(Color.PURPLE, 365));
-        challenges.put(110, new SpeedChallenge());
+        challenges.put(110, new NewBinChallenge(Color.ORANGE, 50, Orientation.HORIZONTAL));
+        challenges.put(130, new NewBinChallenge(Color.TURQUOISE, 175, Orientation.HORIZONTAL));
+        challenges.put(131, new InstructionChallenge("You have completed the progression!"));
     }
 
-    public void handleLevelIncrease(int level, CircleSorter circleSorter) {
+    public void setup(CircleSorter circleSorter) {
+        this.circleSorter = circleSorter;
+        handleLevelIncrease(0);
+    }
+
+    public void handleLevelIncrease(int level) {
         if (challenges.get(level) != null) {
             Challenge c = challenges.get(level);
             c.apply(circleSorter);

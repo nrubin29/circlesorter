@@ -1,37 +1,35 @@
 package me.nrubin29.circlesorter;
 
-import javax.swing.*;
 import java.awt.*;
 
-public class Entity extends JComponent {
+public class Entity {
 
     private final Color color;
     private final GameImage img;
     private final int width, height;
     private int x, y;
+    private final Orientation o;
 
-    public Entity(Color color, GameImage img, int width, int height) {
+    public Entity(Color color, GameImage img, int width, int height, Orientation o) {
         this.color = color;
         this.img = img;
         this.width = width;
         this.height = height;
+        this.o = o;
     }
 
     public Color getColor() {
         return color;
     }
 
-    @Override
     public int getWidth() {
         return width;
     }
 
-    @Override
     public int getHeight() {
         return height;
     }
 
-    @Override
     public int getX() {
         return x;
     }
@@ -40,7 +38,6 @@ public class Entity extends JComponent {
         this.x = x;
     }
 
-    @Override
     public int getY() {
         return y;
     }
@@ -59,12 +56,14 @@ public class Entity extends JComponent {
         else setY(getY() + y);
     }
 
-    @Override
+    public Orientation getOrientation() {
+        return o;
+    }
+
     public void paintComponent(Graphics g) {
         g.drawImage(img.getImage(), getX(), getY(), getWidth(), getHeight(), null);
     }
 
-    @Override
     public Rectangle getBounds() {
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }

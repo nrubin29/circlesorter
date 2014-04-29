@@ -3,26 +3,26 @@ package me.nrubin29.circlesorter.powerup;
 import me.nrubin29.circlesorter.CircleSorter;
 import me.nrubin29.circlesorter.GameImage;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class SlowPowerup extends Powerup {
 
+    private int oldSpeed;
+
     public SlowPowerup(Integer x, Integer y) {
-        super(GameImage.SNAIL_1, x, y);
+        super(GameImage.SNAIL_1, x, y, 10);
     }
 
     @Override
-    public void hit(final CircleSorter circleSorter) {
-        final int oldSpeed = circleSorter.speed;
+    public void use(final CircleSorter circleSorter) {
+        this.oldSpeed = circleSorter.speed;
         circleSorter.speed /= 2;
+        super.use(circleSorter);
+    }
 
-        new Timer(20 * 1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                circleSorter.speed = oldSpeed;
-            }
-        }).start();
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        super.actionPerformed(e);
+        circleSorter.speed = oldSpeed;
     }
 }

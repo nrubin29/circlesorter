@@ -1,27 +1,32 @@
 package me.nrubin29.circlesorter;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public enum GameImage {
 
     BALL_BLUE,
     BALL_GREEN,
+    BALL_ORANGE,
     BALL_PURPLE,
     BALL_RED,
+    BALL_TURQUOISE,
     BALL_YELLOW,
     BIN_BLUE,
     BIN_GREEN,
+    BIN_ORANGE,
     BIN_PURPLE,
     BIN_RED,
+    BIN_TURQUOISE,
     BIN_YELLOW,
+    BINREMOVEPOWERUP,
     HEART,
+    MULTIBALL,
     SNAIL_1,
-    SNAIL_2,
-    MULTIBALL;
+    SNAIL_2;
 
 
-    private Image image;
+    private BufferedImage image;
 
     private GameImage() {
         try {
@@ -31,7 +36,7 @@ public enum GameImage {
         }
     }
 
-    public Image getImage() {
+    public BufferedImage getImage() {
         return image;
     }
 }

@@ -31,8 +31,8 @@ public class Round {
         return score;
     }
 
-    public void addScore(CircleSorter circleSorter) {
-        ChallengeManager.getInstance().handleLevelIncrease(++score, circleSorter);
+    public void addScore() {
+        ChallengeManager.getInstance().handleLevelIncrease(++score);
     }
 
     public int getSecondsPlayed() {

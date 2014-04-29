@@ -2,9 +2,9 @@ package me.nrubin29.circlesorter;
 
 import javax.swing.*;
 
-public class Viewer extends JFrame {
+class Viewer extends JFrame {
 
-    public Viewer() {
+    private Viewer(boolean development) {
         super("Circle Sorter");
 
         add(new Menu(this));
@@ -16,10 +16,10 @@ public class Viewer extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        new Thread(new UpdateChecker(this)).start();
+        new Thread(new UpdateChecker(this, development)).start();
     }
 
     public static void main(String[] args) {
-        new Viewer();
+        new Viewer(args.length >= 1 ? Boolean.valueOf(args[0]) : false);
     }
 }

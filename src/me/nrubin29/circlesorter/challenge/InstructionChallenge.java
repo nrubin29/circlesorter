@@ -2,13 +2,14 @@ package me.nrubin29.circlesorter.challenge;
 
 import me.nrubin29.circlesorter.CircleSorter;
 
-class SpeedChallenge extends Challenge {
+class InstructionChallenge extends Challenge {
 
-    public SpeedChallenge() {
-        super("Speed increased.");
+    public InstructionChallenge(String i) {
+        super(i);
     }
 
+    @Override
     public void apply(CircleSorter circleSorter) {
-        circleSorter.speed += 3;
+
     }
 }
