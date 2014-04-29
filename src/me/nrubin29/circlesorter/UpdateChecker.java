@@ -35,7 +35,7 @@ class UpdateChecker implements Runnable {
 
             remoteVersion = in.readLine();
             StringBuilder infoBuilder = new StringBuilder();
-            while (in.ready()) infoBuilder.append(in.readLine());
+            while (in.ready()) infoBuilder.append(in.readLine()).append("\n");
             information = infoBuilder.toString();
 
             in.close();
@@ -47,7 +47,7 @@ class UpdateChecker implements Runnable {
 
         if (!VERSION.equals(remoteVersion)) {
             frame.dispose();
-            JOptionPane.showMessageDialog(frame, "Update discovered!\n\nHere's what's new:\n" + information + "\n\nDownloading and quitting. Please reopen when the update is installed.");
+            JOptionPane.showMessageDialog(frame, "Update discovered!\n\nHere's what's new:\n" + information + "\nDownloading and quitting. Please reopen when the update is installed.", "Update", JOptionPane.INFORMATION_MESSAGE);
             try {
                 URL url = new URL("https://github.com/nrubin29/circlesorter/raw/master/circlesorter.jar?raw=true");
                 ReadableByteChannel rbc = Channels.newChannel(url.openStream());
