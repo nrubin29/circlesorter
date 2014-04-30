@@ -26,7 +26,7 @@ public class CircleSorter extends JComponent {
 
     public boolean sidewaysUnlocked;
 
-    private boolean pressedDown, pressedUp, pressedLeft, pressedRight, pressedSpacebar;
+    private boolean pressedDown, pressedUp, pressedLeft, pressedRight, pressedSpacebar, pressedEnter;
 
     public int speed;
 
@@ -81,6 +81,7 @@ public class CircleSorter extends JComponent {
                 else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) pressedRight = pressed;
                 else if (e.getKeyCode() == KeyEvent.VK_SPACE) pressedSpacebar = pressed;
                 else if (e.getKeyCode() == KeyEvent.VK_P && !pressed) paused = !paused;
+                else if (e.getKeyCode() == KeyEvent.VK_ENTER) pressedEnter = pressed;
             }
         });
 
@@ -112,6 +113,10 @@ public class CircleSorter extends JComponent {
             currentCircle.modifyLocation(speed, 0);
         }
 
+        if (pressedEnter && currentPowerup != null) {
+            currentPowerup.use(this);
+        }
+
         boolean addBlock = false;
 
         if (currentCircle.getOrientation() == Orientation.VERTICAL && currentCircle.getY() >= viewer.getHeight()) {
@@ -134,8 +139,10 @@ public class CircleSorter extends JComponent {
             }
         }
 
+        if (currentPowerup != null) currentPowerup.tick();
+
         if (displayedPowerup != null && displayedPowerup.getBounds().contains(currentCircle.getX(), currentCircle.getY())) {
-            displayedPowerup.use(this);
+            currentPowerup = displayedPowerup;
         }
 
         if (round.getLives() == 0) {
@@ -179,14 +186,14 @@ public class CircleSorter extends JComponent {
 
         if (currentPowerup != null && currentPowerup.getCurrentSeconds() != -1) {
             g.drawString("Powerup Time: " + currentPowerup.getCurrentSeconds(), 390, 25);
+            g.drawImage(currentPowerup.getImage().getImage(), 365, 10, 20, 20, this);
+            g.drawRect(362, 7, 24, 24);
         }
 
-        StringBuilder texts = new StringBuilder();
+        int j = 0;
         for (String t : text) {
-            texts.append(t).append(" ");
+            g.drawString(t, viewer.getWidth() / 2 - g.getFontMetrics().stringWidth(t) / 2, 25 + (j++ * 25));
         }
-
-        g.drawString(texts.toString(), viewer.getWidth() / 2 - g.getFontMetrics().stringWidth(texts.toString()) / 2, 25 + g.getFontMetrics().getHeight() * 2);
 
         for (int i = 0; i < round.getLives(); i++) {
             g.drawImage(GameImage.HEART.getImage(), 20 + (30 * i), 10, 20, 20, this);

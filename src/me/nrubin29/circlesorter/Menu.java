@@ -50,7 +50,7 @@ class Menu extends JPanel {
         });
         add(comment);
 
-        add(Box.createVerticalStrut(150));
+        add(Box.createVerticalStrut(130));
 
         JLabel created = new JLabel("Created by Noah.");
         created.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -61,6 +61,11 @@ class Menu extends JPanel {
         concept.setAlignmentX(Component.CENTER_ALIGNMENT);
         concept.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 15));
         add(concept);
+
+        JLabel version = new JLabel("Version " + UpdateChecker.VERSION);
+        version.setAlignmentX(Component.CENTER_ALIGNMENT);
+        version.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 15));
+        add(version);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

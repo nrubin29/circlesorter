@@ -3,8 +3,6 @@ package me.nrubin29.circlesorter.powerup;
 import me.nrubin29.circlesorter.CircleSorter;
 import me.nrubin29.circlesorter.GameImage;
 
-import java.awt.event.ActionEvent;
-
 public class MultiballPowerup extends Powerup {
 
     public MultiballPowerup(Integer x, Integer y) {
@@ -18,8 +16,8 @@ public class MultiballPowerup extends Powerup {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        super.actionPerformed(e);
+    public void complete() {
+        super.complete();
         circleSorter.multiball = false;
     }
 }

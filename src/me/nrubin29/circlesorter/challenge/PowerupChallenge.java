@@ -17,7 +17,7 @@ public class PowerupChallenge extends Challenge {
     private HashMap<Integer, Class<? extends Powerup>> powerups = new HashMap<Integer, Class<? extends Powerup>>();
 
     public PowerupChallenge() {
-        super(null);
+        super("Press enter to use powerups.");
 
         this.r = new Random();
         this.powerups = new HashMap<Integer, Class<? extends Powerup>>();
@@ -33,7 +33,16 @@ public class PowerupChallenge extends Challenge {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (r.nextInt(50) == 29 && circleSorter.displayedPowerup == null && circleSorter.currentPowerup == null) {
-                    int x = r.nextInt(640), y = r.nextInt(480);
+                    int x, y;
+
+                    do {
+                        x = r.nextInt(640);
+                    } while (x < 40 || x > 600);
+
+                    do {
+                        y = r.nextInt(480);
+                    } while (y < 40 || y > 440);
+
                     circleSorter.displayedPowerup = getPowerup(circleSorter.round.getScore(), x, y);
 
                     Timer t = new Timer(5000, new ActionListener() {

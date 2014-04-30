@@ -4,7 +4,6 @@ import me.nrubin29.circlesorter.Bin;
 import me.nrubin29.circlesorter.CircleSorter;
 import me.nrubin29.circlesorter.GameImage;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -30,7 +29,8 @@ public class BinRemovePowerup extends Powerup {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void complete() {
+        super.complete();
         circleSorter.bins.addAll(removed);
     }
 }

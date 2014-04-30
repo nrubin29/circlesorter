@@ -22,6 +22,10 @@ public class Entity {
         return color;
     }
 
+    public GameImage getImage() {
+        return img;
+    }
+
     public int getWidth() {
         return width;
     }

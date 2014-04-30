@@ -3,8 +3,6 @@ package me.nrubin29.circlesorter.powerup;
 import me.nrubin29.circlesorter.CircleSorter;
 import me.nrubin29.circlesorter.GameImage;
 
-import java.awt.event.ActionEvent;
-
 public class SlowPowerup extends Powerup {
 
     private int oldSpeed;
@@ -21,8 +19,8 @@ public class SlowPowerup extends Powerup {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        super.actionPerformed(e);
+    public void complete() {
+        super.complete();
         circleSorter.speed = oldSpeed;
     }
 }
