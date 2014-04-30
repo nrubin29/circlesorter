@@ -32,7 +32,7 @@ public class PowerupChallenge extends Challenge {
         Timer t = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (/* r.nextInt(50) == 29 && */ circleSorter.displayedPowerup == null && circleSorter.currentPowerup == null) {
+                if (r.nextInt(50) == 29 && circleSorter.displayedPowerup == null && circleSorter.currentPowerup == null) {
                     int x = r.nextInt(640), y = r.nextInt(480);
                     circleSorter.displayedPowerup = getPowerup(circleSorter.round.getScore(), x, y);
 

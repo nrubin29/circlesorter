@@ -12,5 +12,6 @@ public class LifePowerup extends Powerup {
     @Override
     public void use(CircleSorter circleSorter) {
         circleSorter.round.addLife();
+        actionPerformed(null);
     }
 }
