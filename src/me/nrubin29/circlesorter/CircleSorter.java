@@ -175,10 +175,10 @@ public class CircleSorter extends JComponent {
     @Override
     public void paintComponent(Graphics g) {
         g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
-        g.drawString("Score: " + round.getScore(), 560, 25);
+        g.drawString("Score: " + round.getScore(), 550, 25);
 
         if (currentPowerup != null && currentPowerup.getCurrentSeconds() != -1) {
-            g.drawString("Powerup Time: " + currentPowerup.getCurrentSeconds(), 400, 25);
+            g.drawString("Powerup Time: " + currentPowerup.getCurrentSeconds(), 390, 25);
         }
 
         StringBuilder texts = new StringBuilder();
