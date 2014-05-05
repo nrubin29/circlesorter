@@ -8,7 +8,7 @@ public class LifePowerup extends Powerup {
     private boolean used;
 
     public LifePowerup(Integer x, Integer y) {
-        super(GameImage.HEART, x, y, -1);
+        super(GameImage.HEART, x, y, -1, true);
     }
 
     @Override

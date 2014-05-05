@@ -8,7 +8,11 @@ import java.awt.event.KeyEvent;
 
 class Menu extends JPanel {
 
+    private final Viewer viewer;
+
     public Menu(final Viewer viewer) {
+        this.viewer = viewer;
+
         add(Box.createVerticalStrut(10));
 
         JLabel logo = new JLabel("Circle Sorter", new ImageIcon(GameImage.MULTIBALL.getImage().getScaledInstance(50, 50, 0)), JLabel.CENTER);
@@ -16,27 +20,27 @@ class Menu extends JPanel {
         logo.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 30));
         add(logo);
 
-        add(Box.createVerticalStrut(150));
+        add(Box.createVerticalStrut(125));
 
         final JButton go = new JButton("[G]o");
         go.setAlignmentX(Component.CENTER_ALIGNMENT);
         go.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                viewer.remove(Menu.this);
-                viewer.add(new CircleSorter(viewer));
-                viewer.validate();
-                viewer.repaint();
-                viewer.requestFocus();
-
-                getInputMap().remove(KeyStroke.getKeyStroke(KeyEvent.VK_G, 0));
-                getInputMap().remove(KeyStroke.getKeyStroke(KeyEvent.VK_C, 0));
-
-                getActionMap().remove("go");
-                getActionMap().remove("comment");
+                destroy(new CircleSorter(viewer));
             }
         });
         add(go);
+
+        final JButton highscores = new JButton("[H]ighscores");
+        highscores.setAlignmentX(Component.CENTER_ALIGNMENT);
+        highscores.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                destroy(new HighScores(viewer));
+            }
+        });
+        add(highscores);
 
         final JButton comment = new JButton("[C]omment");
         comment.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -50,7 +54,7 @@ class Menu extends JPanel {
         });
         add(comment);
 
-        add(Box.createVerticalStrut(130));
+        add(Box.createVerticalStrut(125));
 
         JLabel created = new JLabel("Created by Noah.");
         created.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -77,6 +81,14 @@ class Menu extends JPanel {
             }
         });
 
+        getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_H, 0), "highscores");
+        getActionMap().put("highscores", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                highscores.doClick();
+            }
+        });
+
         getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_C, 0), "comment");
         getActionMap().put("comment", new AbstractAction() {
             @Override
@@ -86,5 +98,21 @@ class Menu extends JPanel {
         });
 
         requestFocusInWindow();
+    }
+
+    private void destroy(Component c) {
+        viewer.remove(Menu.this);
+        viewer.add(c);
+        viewer.validate();
+        viewer.repaint();
+        viewer.requestFocus();
+
+        getInputMap().remove(KeyStroke.getKeyStroke(KeyEvent.VK_G, 0));
+        getInputMap().remove(KeyStroke.getKeyStroke(KeyEvent.VK_H, 0));
+        getInputMap().remove(KeyStroke.getKeyStroke(KeyEvent.VK_C, 0));
+
+        getActionMap().remove("go");
+        getActionMap().remove("highscores");
+        getActionMap().remove("comment");
     }
 }

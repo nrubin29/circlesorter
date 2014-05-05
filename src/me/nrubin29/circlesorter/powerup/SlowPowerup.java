@@ -8,7 +8,7 @@ public class SlowPowerup extends Powerup {
     private int oldSpeed;
 
     public SlowPowerup(Integer x, Integer y) {
-        super(GameImage.SNAIL_1, x, y, 10);
+        super(GameImage.SNAIL_1, x, y, 10, false);
     }
 
     @Override

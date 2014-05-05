@@ -41,7 +41,7 @@ public class PowerupChallenge extends Challenge {
 
                     do {
                         y = r.nextInt(480);
-                    } while (y < 40 || y > 440);
+                    } while (y < 80 || y > 400);
 
                     circleSorter.displayedPowerup = getPowerup(circleSorter.round.getScore(), x, y);
 

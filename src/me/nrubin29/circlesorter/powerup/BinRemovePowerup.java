@@ -12,7 +12,7 @@ public class BinRemovePowerup extends Powerup {
     private final ArrayList<Bin> removed;
 
     public BinRemovePowerup(Integer x, Integer y) {
-        super(GameImage.BINREMOVEPOWERUP, x, y, 10);
+        super(GameImage.BINREMOVEPOWERUP, x, y, 10, false);
         this.removed = new ArrayList<Bin>();
     }
 

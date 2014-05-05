@@ -1,6 +1,7 @@
 package me.nrubin29.circlesorter;
 
 import javax.swing.*;
+import java.sql.SQLException;
 
 class Viewer extends JFrame {
 
@@ -12,16 +13,18 @@ class Viewer extends JFrame {
             public void uncaughtException(Thread thread, Throwable throwable) {
                 throwable.printStackTrace();
 
-                JOptionPane.showMessageDialog(
-                        Viewer.this,
-                        "An error has occurred." + "\n" +
-                                "If you are connected to the internet, it has been automatically reported." + "\n" +
-                                "Sorry!",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE
-                );
+                if (!(throwable instanceof SQLException)) {
+                    JOptionPane.showMessageDialog(
+                            Viewer.this,
+                            "An error has occurred." + "\n" +
+                                    "If you are connected to the internet, it has been automatically reported." + "\n" +
+                                    "Sorry!",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
 
-                MySQL.getInstance().pushError(throwable);
+                    MySQL.getInstance().pushError(throwable);
+                }
             }
         });
 

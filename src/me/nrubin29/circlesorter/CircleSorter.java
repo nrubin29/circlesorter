@@ -142,7 +142,10 @@ public class CircleSorter extends JComponent {
         if (currentPowerup != null) currentPowerup.tick();
 
         if (displayedPowerup != null && displayedPowerup.getBounds().contains(currentCircle.getX(), currentCircle.getY())) {
-            currentPowerup = displayedPowerup;
+            if (displayedPowerup.isAuto()) {
+                displayedPowerup.use(this);
+                displayedPowerup.complete();
+            } else currentPowerup = displayedPowerup;
         }
 
         if (round.getLives() == 0) {
@@ -192,7 +195,7 @@ public class CircleSorter extends JComponent {
 
         int j = 0;
         for (String t : text) {
-            g.drawString(t, viewer.getWidth() / 2 - g.getFontMetrics().stringWidth(t) / 2, 25 + (j++ * 25));
+            g.drawString(t, viewer.getWidth() / 2 - g.getFontMetrics().stringWidth(t) / 2, 75 + (j++ * 25));
         }
 
         for (int i = 0; i < round.getLives(); i++) {

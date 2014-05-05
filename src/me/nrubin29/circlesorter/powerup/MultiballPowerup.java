@@ -6,7 +6,7 @@ import me.nrubin29.circlesorter.GameImage;
 public class MultiballPowerup extends Powerup {
 
     public MultiballPowerup(Integer x, Integer y) {
-        super(GameImage.MULTIBALL, x, y, 10);
+        super(GameImage.MULTIBALL, x, y, 10, false);
     }
 
     @Override

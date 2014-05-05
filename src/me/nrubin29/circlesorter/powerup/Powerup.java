@@ -13,17 +13,23 @@ public class Powerup extends Entity {
 
     CircleSorter circleSorter;
     private int currentSeconds;
+    private final boolean auto;
     private boolean active, counting;
 
-    Powerup(GameImage img, int x, int y, int totalSeconds) {
+    Powerup(GameImage img, int x, int y, int totalSeconds, boolean auto) {
         super(null, img, 20, 20, Orientation.VERTICAL);
         this.currentSeconds = totalSeconds;
+        this.auto = auto;
         setX(x);
         setY(y);
     }
 
     public int getCurrentSeconds() {
         return currentSeconds;
+    }
+
+    public boolean isAuto() {
+        return auto;
     }
 
     public void tick() {
@@ -49,7 +55,7 @@ public class Powerup extends Entity {
         active = true;
     }
 
-    void complete() {
+    public void complete() {
         circleSorter.currentPowerup = null;
         circleSorter.displayedPowerup = null;
         active = false;
