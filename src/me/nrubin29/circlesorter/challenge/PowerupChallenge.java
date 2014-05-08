@@ -43,7 +43,7 @@ public class PowerupChallenge extends Challenge {
                         y = r.nextInt(480);
                     } while (y < 80 || y > 400);
 
-                    circleSorter.displayedPowerup = getPowerup(circleSorter.round.getScore(), x, y);
+                    circleSorter.displayedPowerup = getPowerup(circleSorter.round.getBoostedScore(), x, y);
 
                     Timer t = new Timer(5000, new ActionListener() {
                         @Override
@@ -62,9 +62,9 @@ public class PowerupChallenge extends Challenge {
     }
 
     @Override
-    public void onLevelIncrease(int level, CircleSorter circleSorter) {
+    public void onLevelIncrease(int level, CircleSorter circleSorter, boolean showMessage) {
         if (powerups.get(level) != null) {
-            circleSorter.addText("Unlocked " + powerups.get(level).getSimpleName() + ".");
+            if (showMessage) circleSorter.addText("Unlocked " + powerups.get(level).getSimpleName() + ".");
         }
     }
 

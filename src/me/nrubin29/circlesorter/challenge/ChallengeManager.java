@@ -43,18 +43,21 @@ public class ChallengeManager {
 
     public void setup(CircleSorter circleSorter) {
         this.circleSorter = circleSorter;
-        handleLevelIncrease(0);
     }
 
-    public void handleLevelIncrease(int level) {
+    public void handleLevelIncrease(int level, boolean showMessage) {
+        if (level == 1) {
+            handleLevelIncrease(0, true);
+        }
+
         if (challenges.get(level) != null) {
             Challenge c = challenges.get(level);
             c.apply(circleSorter);
-            if (c.getText() != null) circleSorter.addText(c.getText());
+            if (c.getText() != null && showMessage) circleSorter.addText(c.getText());
         }
 
         for (Challenge c : challenges.values()) {
-            c.onLevelIncrease(level, circleSorter);
+            c.onLevelIncrease(level, circleSorter, showMessage);
         }
     }
 }

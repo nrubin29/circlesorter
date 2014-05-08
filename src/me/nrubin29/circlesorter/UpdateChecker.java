@@ -12,7 +12,7 @@ import java.nio.channels.ReadableByteChannel;
 
 class UpdateChecker implements Runnable {
 
-    static final String VERSION = "1.3"; // TODO: Don't forget to change in every new version!
+    static final String VERSION = "1.4"; // TODO: Don't forget to change in every new version!
 
     private final JFrame frame;
     private final boolean development;

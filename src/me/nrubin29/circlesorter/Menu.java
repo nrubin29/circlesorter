@@ -20,14 +20,24 @@ class Menu extends JPanel {
         logo.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 30));
         add(logo);
 
-        add(Box.createVerticalStrut(125));
+        add(Box.createVerticalStrut(110));
+
+        JLabel startLevelInfo = new JLabel("Select a starting level:");
+        startLevelInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        startLevelInfo.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+        add(startLevelInfo);
+
+        final JSpinner startLevel = new JSpinner(new SpinnerNumberModel(0, 0, 14, 1));
+        startLevel.setMaximumSize(new Dimension(75, startLevel.getHeight()));
+        ((JSpinner.DefaultEditor) startLevel.getEditor()).getTextField().setEditable(false);
+        add(startLevel);
 
         final JButton go = new JButton("[G]o");
         go.setAlignmentX(Component.CENTER_ALIGNMENT);
         go.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                destroy(new CircleSorter(viewer));
+                destroy(new CircleSorter(viewer, Integer.parseInt(startLevel.getValue().toString())));
             }
         });
         add(go);
@@ -54,7 +64,7 @@ class Menu extends JPanel {
         });
         add(comment);
 
-        add(Box.createVerticalStrut(125));
+        add(Box.createVerticalStrut(102));
 
         JLabel created = new JLabel("Created by Noah.");
         created.setAlignmentX(Component.CENTER_ALIGNMENT);

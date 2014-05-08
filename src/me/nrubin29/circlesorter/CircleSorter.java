@@ -37,7 +37,7 @@ public class CircleSorter extends JComponent {
 
     public final Round round;
 
-    public CircleSorter(Viewer viewer) {
+    public CircleSorter(Viewer viewer, int startScore) {
         this.viewer = viewer;
 
         bins = new ArrayList<Bin>();
@@ -50,7 +50,9 @@ public class CircleSorter extends JComponent {
 
         random = new Random();
 
-        round = new Round();
+        ChallengeManager.getInstance().setup(this);
+
+        round = new Round(startScore);
 
         addCircle();
 
@@ -80,15 +82,15 @@ public class CircleSorter extends JComponent {
                 else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) pressedLeft = pressed;
                 else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) pressedRight = pressed;
                 else if (e.getKeyCode() == KeyEvent.VK_SPACE) pressedSpacebar = pressed;
-                else if (e.getKeyCode() == KeyEvent.VK_P && !pressed) paused = !paused;
-                else if (e.getKeyCode() == KeyEvent.VK_ENTER) pressedEnter = pressed;
+                else if (e.getKeyCode() == KeyEvent.VK_P && !pressed) {
+                    paused = !paused;
+                    repaint();
+                } else if (e.getKeyCode() == KeyEvent.VK_ENTER) pressedEnter = pressed;
             }
         });
 
         setFocusable(true);
         requestFocusInWindow();
-
-        ChallengeManager.getInstance().setup(this);
     }
 
     private void tick() {
@@ -184,8 +186,18 @@ public class CircleSorter extends JComponent {
 
     @Override
     public void paintComponent(Graphics g) {
+        if (paused) {
+            g.fillRect(0, 0, 640, 480);
+
+            g.setColor(java.awt.Color.WHITE);
+            g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 48));
+            g.drawString("Paused", 640 / 2 - g.getFontMetrics().stringWidth("Paused") / 2, 480 / 2 - g.getFontMetrics().getHeight() / 2);
+
+            return;
+        }
+
         g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
-        g.drawString("Score: " + round.getScore(), 550, 25);
+        g.drawString("Score: " + round.getRealScore(), 550, 25);
 
         if (currentPowerup != null && currentPowerup.getCurrentSeconds() != -1) {
             g.drawString("Powerup Time: " + currentPowerup.getCurrentSeconds(), 390, 25);

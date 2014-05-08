@@ -9,15 +9,19 @@ import java.util.Date;
 
 public class Round {
 
-    private int score, lives, secondsPlayed;
+    private int score;
+    private final int startScore;
+    private int lives;
+    private int secondsPlayed;
     private final Date startTime;
     private final Timer t;
 
-    public Round() {
-        startTime = new Date();
-        lives = 3;
+    public Round(int startScore) {
+        this.startScore = startScore * 10;
+        this.startTime = new Date();
+        this.lives = 3;
 
-        t = new Timer(1000, new ActionListener() {
+        this.t = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 secondsPlayed++;
@@ -25,14 +29,26 @@ public class Round {
         });
 
         t.start();
+
+        for (int i = 10; i < this.startScore; i += 10) {
+            ChallengeManager.getInstance().handleLevelIncrease(i, false);
+        }
     }
 
-    public int getScore() {
+    public int getRealScore() {
         return score;
     }
 
+    public int getStartScore() {
+        return startScore;
+    }
+
+    public int getBoostedScore() {
+        return score + startScore;
+    }
+
     public void addScore() {
-        ChallengeManager.getInstance().handleLevelIncrease(++score);
+        ChallengeManager.getInstance().handleLevelIncrease(++score + startScore, true);
     }
 
     public int getSecondsPlayed() {
@@ -57,6 +73,6 @@ public class Round {
 
     public void endRound() {
         t.stop();
-        MySQL.getInstance().pushData(this);
+        MySQL.getInstance().pushRound(this);
     }
 }

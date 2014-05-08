@@ -16,7 +16,7 @@ abstract class Challenge {
 
     public abstract void apply(CircleSorter circleSorter);
 
-    public void onLevelIncrease(int level, CircleSorter circleSorter) {
+    public void onLevelIncrease(int level, CircleSorter circleSorter, boolean showMessage) {
 
     }
 }
